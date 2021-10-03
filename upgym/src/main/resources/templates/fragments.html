@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+    <!-- le agrego el th:fragment="nombre que le quiera poner" -->
+        <nav th:fragment="navbar"  class="font-robo navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+
+            <a class="navbar-brand" th:href="@{/}">
+                <img class="img-responsive" th:src="@{/imagenes/logos/logonavbar.png}">       UPGYM
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+                    </li>
+                    <li class="nav-item" th:unless="${action == 'login'}" sec:authorize="!isAuthenticated()">
+                        <a  class="nav-link" th:href="@{/login/elegir}">Registrarse</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a  class="nav-link" th:href="@{/roles/crear}">Crear Roles</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a  class="nav-link" th:href="@{/usuarios/todos}">Usuarios</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a  class="nav-link" th:href="@{/gimnasios/todos}">Gimnasios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a  class="nav-link" th:href="@{/gimnasios}">Sucursales</a>
+                    </li>
+                    <li  class="nav-item">
+                        <a class="nav-link" href="https://www.nutrinfo.com" target="_blank">Nutrición</a>
+                    </li>
+                    <li >
+                        <a class="nav-link" href="https://lawebdelasalud.com" target="_blank">Salud</a>
+                    </li>
+                </ul>               
+                <ul    class="navbar-nav mr-auto">                    
+                    <li th:unless="${action == 'login'}"  sec:authorize="!isAuthenticated()">
+                        <a class="btn btn-outline-warning" th:href="@{/login}">Iniciar Sesion</a>                        
+                    </li>                  
+                    <li th:if="${actividad == 'elegir'}">
+                        <a class="btn btn-outline-warning" th:href="@{/login}">Iniciar Sesion</a>
+                    </li>
+                    <div sec:authorize="hasAnyRole('USUARIO,ADMIN')">
+                        <img th:src="@{|/obtener-imagen/${usuario.imagen}|}" width="38" height="38"class="rounded-circle me-2">
+                    </div>
+                    <div sec:authorize="hasAnyRole('GIMNASIO')">
+                        <img th:src="@{|/obtener-imagen/${gimnasio.imagen}|}" width="38" height="38"class="rounded-circle me-2">
+                    </div>
+
+
+                    <li class="dropdown" sec:authorize="isAuthenticated()"> 
+                        <a class="btn btn-outline-warning dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <span sec:authentication="name"></span>     
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a  sec:authorize="hasRole('USUARIO')" class="dropdown-item" th:href="@{/usuarios/perfil}">Perfil</a></li>
+                            <li><a  sec:authorize="hasRole('GIMNASIO')" class="dropdown-item" th:href="@{/gimnasios/perfil}">Perfil</a></li>
+                            <li><a  sec:authorize="hasRole('ADMIN')" class="dropdown-item" th:href="@{/usuarios/perfil}">Perfil</a></li>
+                            <li><a sec:authorize="hasRole('USUARIO')" class="dropdown-item" th:href="@{/reservas/usuario}">Mis Reservas</a></li>
+                            <li><a sec:authorize="hasRole('GIMNASIO')" class="dropdown-item" th:href="@{/reservas/gimnasio}">Mis Reservas</a></li>
+                            <li><a sec:authorize="hasRole('ADMIN')" class="dropdown-item" th:href="@{/reservas/usuario}">Mis Reservas</a></li>
+                            <form th:action="@{/logout}" method="post">
+                                <button class="dropdown-item" type="submit">Cerrar Sesion</button>
+                            </form>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+<!-- le agrego el th:fragment="nombre que le quiera poner" -->
+
+
+    <footer id="footer" th:fragment="footer">
+
+
+        <div class="contenedor footer-content">
+            <div class="contact-us">
+                <h2 class="brand">UpGym</h2>
+                <p>Copyright (c) 2021 UPGYM Todos los derechos reservados.</p>
+            </div>
+            <div class="social-media">
+                <a href="https://www.instagram.com/upgym_arg/?hl=es-la" target="_blank" class="social-media-icon">
+                    <i class='bx bxl-instagram' ></i>
+                </a>
+                <a href="https://open.spotify.com/playlist/5UF7vvIRJ38uDrgffvFhxY?si=f806a0d9431247bd" target="_blank" class="social-media-icon">
+                    <i class='bx bxl-spotify' ></i>
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=100070592501875" target="_blank"  class="social-media-icon">
+                    <i class='bx bxl-facebook'></i>
+                </a>
+                <a href="https://www.youtube.com/" target="_blank" class="social-media-icon">
+                    <i class='bx bxl-youtube' ></i>
+                </a>
+            </div>
+        </div>
+        <div class="line"></div>
+    </footer>
+
+ 
+</html>
